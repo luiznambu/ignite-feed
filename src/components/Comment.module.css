@@ -89,6 +89,7 @@
 
 /* estilizacao para a bolinha */
 .commentBox footer button span::before {
+  /* código da "bolinha" antes do horário */
   content: "\2022";
   padding: 0 0.25rem;
 }
