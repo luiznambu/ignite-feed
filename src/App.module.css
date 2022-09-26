@@ -4,7 +4,20 @@
     padding: 0 1rem;
 
     display: grid;
+    /* duas colunas, uma com 256px e a outra com o resto */
     grid-template-columns: 256px 1fr;
     gap: 2rem;
     align-items: flex-start;
+}
+
+/* quando a tela for menor que 768px
+  o grid terá apenas uma coluna que ocupará o espaço designidado */
+@media (max-width: 768px) {
+  html {
+    /* fonte de 14px = 87.5% de 16px */
+    font-size: 87.5%;
+  }
+  .wrapper {
+    grid-template-columns: 1fr;
+  }
 }
