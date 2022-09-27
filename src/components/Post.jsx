@@ -23,6 +23,8 @@ export function Post({ author, publishedAt, content }) {
     addSuffix: true,
   })
 
+  const isNewCommentEmpty = newComment.length === 0;
+
   function handleCreateNewComment() {
     event.preventDefault();
     setComments([...comments, newComment]);
@@ -30,11 +32,23 @@ export function Post({ author, publishedAt, content }) {
   }
 
   function handleNewComment() {
+    //para que a validacao nao ' bug' precisamos settar sua validacao para string vazia...
+    event.target.setCustomValidity('');
     setNewComment(event.target.value);
   }
 
-  function deleteComment(comment) {
-    console.log(`deletar comentario ${comment}`);
+  function deleteComment(commentToDelete) {
+    // imutabilidade -> as variaveis nao sofrem mutacao, é criado um novo valor
+    const commentsAfterDelete = comments.filter(comment => {
+      return comment !== commentToDelete;
+    });
+
+    setComments(commentsAfterDelete);
+  }
+
+  //mudando a mensagem de validacao padrao para uma customizada
+  function handleNewCommentInvalid() {
+    event.target.setCustomValidity('Este campo é obrigatório!')
   }
 
   return (
@@ -71,10 +85,13 @@ export function Post({ author, publishedAt, content }) {
           //o valor dessa textarea é igual a newComment -> sempre que o valor de newComment mudar a textarea ira mudar junto... (apos handleCreateNewComment fica vazio (''))
           value={newComment}
           onChange={handleNewComment}
+
+          onInvalid={handleNewCommentInvalid}
+          required={true}
         />
       
         <footer>
-          <button type="submit">
+          <button type="submit" disabled={isNewCommentEmpty}>
             Publicar
           </button>
         </footer>
@@ -87,6 +104,7 @@ export function Post({ author, publishedAt, content }) {
             <Comment 
               key={comment} 
               content={comment}
+              //passando a funcao deleteComment como parametro dentro do <Comment />
               onDeleteComment={deleteComment}
             />
           )
